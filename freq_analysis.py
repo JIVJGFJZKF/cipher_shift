@@ -1,41 +1,45 @@
-__version__ = "0.0.1"
-__author__ = "SRE"
+__version__ = '0.0.2'
+__author__ = 'SRE'
 
 #Frequency Analysis
 import matplotlib.pyplot as plt
 import pandas as pd
 
-class FreqAnalysis:
+class freq_analysis:
     
-    valFigWidth = 16
-    valFigHeight = 10
-    
-    def getLetterCount(self,msg,valChars=r'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',width=valFigWidth,height=valFigHeight):
-        self.valFigWidth= width
-        self.valFigHeight = height
-        letterCount = dict.fromkeys(valChars,0)
-        #{'A': 0, 'B': 0, 'C': 0, 'D': 0, 'E': 0, 'F': 0, 'G': 0, 'H': 0, 'I': 0, 'J': 0, 'K': 0, 'L': 0, 'M': 0, 'N': 0, 'O': 0, 'P': 0, 'Q': 0, 'R': 0, 'S': 0, 'T': 0, 'U': 0, 'V': 0, 'W': 0, 'X': 0, 'Y': 0, 'Z': 0}
-        for letter in msg.upper():
-            if letter in valChars:
-                letterCount[letter] += 1
-        return letterCount
+    val_fig_width = 14.
+    val_fig_height = 6.
 
-    def getLetterPlot(self,msg,valChars=r'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',valTitle=''):
+    str_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    
+    def get_letter_count(self,msg,val_chars:str=str_chars,
+                         width:float=val_fig_width,
+                         height:float=val_fig_height):
+        self.val_fig_width= width
+        self.val_fig_height = height
+        letter_count = dict.fromkeys(val_chars,0)
+        for letter in msg.upper():
+            if letter in val_chars:
+                letter_count[letter] += 1
+        return letter_count
+
+    def get_letter_plot(self,msg,val_chars:str=str_chars,
+                        val_title=''):
         pd.options.display.max_columns = 26
-        valHistLets = self.getLetterCount(msg,valChars)
-        df = pd.DataFrame.from_dict(valHistLets,orient='index')
+        val_hist_lets = self.get_letter_count(msg,val_chars)
+        df = pd.DataFrame.from_dict(val_hist_lets,orient='index')
         df.columns = ['Count']
         df['Letter'] = list(df.index)
         df = df.sort_values(['Letter'],ascending=[1])
         print(df.transpose().head(1))
-        return(df,df.plot.bar(x='Letter',y='Count',title=valTitle,figsize=(self.valFigWidth,self.valFigHeight)))
+        return(df,df.plot.bar(x='Letter',y='Count',title=val_title,figsize=(self.val_fig_width,self.val_fig_height)))
 
-    def getTwinPlot(self,df,valPlain,valEncr,valTitle):
-        fig = plt.figure(figsize=(self.valFigWidth,self.valFigHeight))
+    def get_twin_plot(self,df:pd.DataFrame,val_plain,val_encr,val_title:str):
+        fig = plt.figure(figsize=(self.val_fig_width,self.val_fig_height))
         ax = fig.add_subplot(111)
-        valWidth = 0.3
-        df[valPlain].plot(kind='bar',color='green',width=valWidth,position=1,title=valTitle)
-        df[valEncr].plot(kind='bar',color='red',width=valWidth,position=0)
+        val_width = 0.3
+        df[val_plain].plot(kind='bar',color='green',width=val_width,position=1,title=val_title)
+        df[val_encr].plot(kind='bar',color='red',width=val_width,position=0)
         ax.set_ylabel('Character Count')
         plt.legend(loc='best')
         plt.show()
